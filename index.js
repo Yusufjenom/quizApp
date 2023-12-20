@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const {connectToDatabase} = require('./database/db');
 const adminRoutes = require('./routers/adminRoutes');
+const generalRoutes = require('./routers/generalRoute');
 
 
 const port = process.env.PORT || 8080;
@@ -20,6 +21,19 @@ app.use(cookieParser());
 
 //ROUTES MIDDLEWARE
 app.use('/api/v1', adminRoutes);
+app.use('/api/v1', generalRoutes);
+
+
+//GET THE LANDING PAGE
+app.get('/', (req, res) => {
+  try{
+    res.status(200).render("landingPage")
+ }
+ catch(err){
+     console.log(err.message);
+ }
+});
+
 
 //SPINNING DEV PORT AND CONNECTING TO DATABASE
 (async function(){
