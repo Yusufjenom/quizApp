@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/uploadQA.css">
+    <title>Quiz Form</title>
+</head>
+<body>
+
+<header>
+    <div class="logo">Quiz Form</div>
+   
+</header>
+
+<section class="form-section">
+    <form id="quizForm" action="/api/v1/upload-questions-answers" method="post">
+        <label for="courseTitle">Course Title:</label>
+        <input type="text" id="courseTitle" name="courseTitle" required>
+
+        <div id="questionsContainer"></div>
+
+        <button type="submit">Submit Quiz</button>
+    </form>
+</section>
+
+<!-- <%- include("partials/footer"); -%> -->
+<script src="/js/uploadQA.js"></script>
+</body>
+</html>
