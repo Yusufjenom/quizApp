@@ -1,19 +1,39 @@
 const { QuestionAndAnswerModel } = require('../models/Q & A/q&aModel');
 
 
+//GET QUESTIONS AND ANSWER UPLOAD FORM
+const getQA = async (req, res) => {
+    try{
+    res.status(200).render("uploadQuestionsAndAnswers.ejs");
+    }
+    catch(err){
+        console.log(err.message);
+    }
+};
+
 //UPLOADING BOTH QUESTIONS AND ANSWERS
 const uploadQuestionsAndAnswers = async (req, res) => {
     try {
-        const {course, qAnda} = req.body;
+        //const {course, qAnda} = req.body;
+        const data = req.body;
+        // console.log(data);
+        // let answers = []
+
+        // let correctAnswerContainer = Object.values(data)
+        // for(item of correctAnswerContainer){
+        //     if(item.includes("Option")){
+        //         answers.push(item)
+        //     }
+        // }
+         
+        // console.log(answers);
+
         const newUpload = new QuestionAndAnswerModel({
-            course,
-            qAnda
+            qAnda : data
         });
         const savedQuestionsAndAnswer = await newUpload.save();
-        res.status(201).json({
-            success: true,
-            savedQuestionsAndAnswer
-        });
+        console.log(savedQuestionsAndAnswer);
+        res.status(201).redirect("/");
     }
     catch (err) {
         console.log(err)
@@ -23,4 +43,4 @@ const uploadQuestionsAndAnswers = async (req, res) => {
 
 
 
-module.exports = {uploadQuestionsAndAnswers};
+module.exports = {uploadQuestionsAndAnswers, getQA};
