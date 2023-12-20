@@ -1,18 +1,6 @@
 const mongoose = require('mongoose');
 
 const questionAndAnswerSchema = new mongoose.Schema({
-    course:{
-        type: String,
-        required: true
-    },
-    // question:{
-    //     type: String,
-    //     required: true
-    // },
-    // answer: {
-    //     type: String,
-    //     required: true
-    // },
     qAnda: {
         type: Array,
         default: []
