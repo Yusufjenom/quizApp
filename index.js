@@ -27,7 +27,7 @@ app.use('/api/v1', generalRoutes);
 //GET THE LANDING PAGE
 app.get('/', (req, res) => {
   try{
-    res.status(200).render("landingPage")
+    res.status(200).render("landingPage");
  }
  catch(err){
      console.log(err.message);
