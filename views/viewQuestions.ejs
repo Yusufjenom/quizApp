@@ -9,16 +9,34 @@
 <body>
 
 <header>
-    <div class="logo">Quiz Display</div>
+    <div class="logo"><%=displayQuestions.courseTitle%> Quiz </div>
 </header>
 
 <section class="form-section">
     <form id="quizDisplayForm">
-        <div id="questionsContainer"></div>
+        <div class="question">
+            <label>Question 1: <%=displayQuestions.question0%></label>
+            <label><input type="radio" name="q0" value="Paris">A. <%=displayQuestions.q0option1%></label>
+            <label><input type="radio" name="q0" value="Berlin"> B. <%=displayQuestions.q0option2%></label>
+            <label><input type="radio" name="q0" value="Madrid"> C. <%=displayQuestions.q0option3%></label>
+            <label><input type="radio" name="q0" value="Rome"> D. <%=displayQuestions.q0option4%></label>
+            <label><input type="radio" name="q0" value="London"> E. <%=displayQuestions.q0option5%></label>
+        </div>
+
+        <div class="question">
+            <label>Question 2: <%=displayQuestions.question1%></label>
+            <label><input type="radio" name="q1" value="Mars"> A. <%=displayQuestions.q1option1%></label>
+            <label><input type="radio" name="q1" value="Venus"> B. <%=displayQuestions.q1option2%></label>
+            <label><input type="radio" name="q1" value="Jupiter"> C. <%=displayQuestions.q1option3%></label>
+            <label><input type="radio" name="q1" value="Saturn"> D. <%=displayQuestions.q1option4%></label>
+            <label><input type="radio" name="q1" value="Earth"> E. <%=displayQuestions.q1option5%></label>
+        </div>
+
+        <!-- Add more questions as needed -->
+
         <button type="submit">Submit Answers</button>
     </form>
 </section>
 
-<script src="/js/viewQA.js"></script>
 </body>
 </html>
