@@ -1,7 +1,6 @@
 const form = document.getElementById('quizDisplayForm');
 const questionsContainer = document.getElementById('questionsContainer');
 
-// Mock data for questions and options (replace this with your backend logic)
 const quizData = [
     {
         question: 'What is the capital of France?',
@@ -11,7 +10,7 @@ const quizData = [
         question: 'Which planet is known as the Red Planet?',
         options: ['Mars', 'Venus', 'Jupiter', 'Saturn', 'Earth'],
     },
-    // Add more questions as needed
+    
 ];
 
 // Function to create a question with options for display
@@ -28,7 +27,7 @@ function createQuestionElement(index, questionData) {
         const optionLabel = document.createElement('label');
         optionLabel.textContent = `${String.fromCharCode(65 + i)}. ${option}`;
         questionElement.appendChild(optionLabel);
-        
+
         const optionInput = document.createElement('input');
         optionInput.type = 'radio';
         optionInput.name = `q${index}`;
