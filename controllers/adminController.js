@@ -93,4 +93,28 @@ const loginAdmin = async (req, res) => {
     }
 };
 
-module.exports = {uploadQuestionsAndAnswers, getQA, createAdmin, loginAdmin};
+const getAdminSignupForm = async (req, res) => {
+    try{
+   res.status(200).render("signupAdmin");
+    }
+    catch(err){
+        console.log(err);
+    }
+};
+
+const getAdminLoginForm = async (req, res) => {
+    try{
+   res.status(200).render("loginAmin");
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+
+module.exports = {uploadQuestionsAndAnswers,
+                    getQA,
+                    createAdmin, 
+                    loginAdmin,
+                    getAdminSignupForm,
+                    getAdminLoginForm
+                };
