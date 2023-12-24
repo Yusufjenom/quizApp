@@ -1,4 +1,5 @@
 const { QuestionAndAnswerModel } = require('../models/Q & A/q&aModel');
+const {UserModel} = require('../models/users/userModel');
 
 
 
@@ -52,5 +53,71 @@ const submitAnswers = async (req, res) => {
     }
 };
 
+const createUser = async (req, res) => {
+    try{
+      const {email, password, name} = req.body;
 
-module.exports = { getQuestions, submitAnswers };
+      const salt = await bcrypt.genSalt(10)
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const newUser = new UserModel({
+        email,
+        name,
+        password: hashedPassword
+      });
+      const savedUser = await newUser.save();
+      res.status(201).json({
+        success: true,
+        savedUser
+      })
+
+    }
+    catch(err){
+        console.log(err.message);
+    }
+};
+
+
+const loginUser = async (req, res) => {
+    try{
+     const {email, password} = req.body;
+     const user = await UserModel.findOne({email});
+
+     if(user){
+       const isPassword = await bcrypt.compare(password, user.password);
+
+       if(isPassword){
+        const token = await jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: period});
+        if(token){
+            res.cookie("userToken", token);
+            res.status(200).json({
+                success: true,
+                user,
+            })
+        }
+        else{
+            throw new Error("invalid token")
+        }
+       }
+       else{
+        throw new Error("incorrect password");
+       }
+     }
+     else{
+        throw new Error("invalid email address");
+     }
+    }
+    catch(err){
+        console.log(err.message)
+        res.status(400).json({
+            success: false,
+            message: err.message
+        })
+    }
+};
+
+
+module.exports = { getQuestions,
+                   submitAnswers,
+                   createUser,
+                   loginUser 
+                 };
