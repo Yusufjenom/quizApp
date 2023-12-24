@@ -115,9 +115,28 @@ const loginUser = async (req, res) => {
     }
 };
 
+const getUserSignUpForm = async (req, res) => {
+    try{
+     res.status(200).render("signupUser");
+    }
+    catch(err){
+        console.log(err.message)
+    }
+};
+
+const getUserLoginForm = async (req, res) => {
+    try{
+     res.status(200).render("loginUser");
+    }
+    catch(err){
+        console.log(err.message)
+    }
+};
 
 module.exports = { getQuestions,
                    submitAnswers,
                    createUser,
-                   loginUser 
+                   loginUser,
+                   getUserSignUpForm,
+                   getUserLoginForm 
                  };
