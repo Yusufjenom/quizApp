@@ -1,6 +1,9 @@
 const { QuestionAndAnswerModel } = require('../models/Q & A/q&aModel');
+const {AdminModel} = require('../models/admin/adminModel');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-
+const period = 60 * 60 * 24;
 //GET QUESTIONS AND ANSWER UPLOAD FORM
 const getQA = async (req, res) => {
     try{
@@ -14,20 +17,7 @@ const getQA = async (req, res) => {
 //UPLOADING BOTH QUESTIONS AND ANSWERS
 const uploadQuestionsAndAnswers = async (req, res) => {
     try {
-        //const {course, qAnda} = req.body;
         const data = req.body;
-        // console.log(data);
-        // let answers = []
-
-        // let correctAnswerContainer = Object.values(data)
-        // for(item of correctAnswerContainer){
-        //     if(item.includes("Option")){
-        //         answers.push(item)
-        //     }
-        // }
-         
-        // console.log(answers);
-
         const newUpload = new QuestionAndAnswerModel({
             qAnda : data
         });
@@ -41,6 +31,66 @@ const uploadQuestionsAndAnswers = async (req, res) => {
 };
 
 
+const createAdmin = async (req, res) => {
+    try{
+      const {email, password, name} = req.body;
+
+      const salt = await bcrypt.genSalt(10)
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const newAdmin = new AdminModel({
+        email,
+        name,
+        password: hashedPassword
+      });
+      const savedAdmin = await newAdmin.save();
+      res.status(201).json({
+        success: true,
+        savedAdmin
+      })
+
+    }
+    catch(err){
+        console.log(err.message);
+    }
+};
 
 
-module.exports = {uploadQuestionsAndAnswers, getQA};
+const loginAdmin = async (req, res) => {
+    try{
+     const {email, password} = req.body;
+     const user = await AdminModel.findOne({email});
+
+     if(user){
+       const isPassword = await bcrypt.compare(password, user.password);
+
+       if(isPassword){
+        const token = await jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: period});
+        if(token){
+            res.cookie("adminToken", token);
+            res.status(200).json({
+                success: true,
+                user,
+            })
+        }
+        else{
+            throw new Error("invalid token")
+        }
+       }
+       else{
+        throw new Error("incorrect password");
+       }
+     }
+     else{
+        throw new Error("invalid email address");
+     }
+    }
+    catch(err){
+        console.log(err.message)
+        res.status(400).json({
+            success: false,
+            message: err.message
+        })
+    }
+};
+
+module.exports = {uploadQuestionsAndAnswers, getQA, createAdmin, loginAdmin};
