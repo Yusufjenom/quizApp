@@ -2,7 +2,9 @@ const router = require('express').Router();
 const {uploadQuestionsAndAnswers, 
             getQA, 
             createAdmin,
-            loginAdmin
+            loginAdmin,
+            getAdminSignupForm,
+            getAdminLoginForm
         } = require('../controllers/adminController');
 
 
@@ -17,6 +19,10 @@ router.post('/signup-admin', createAdmin);
 
 //LOGIN ADMIN
 router.post('/login-admin', loginAdmin);
+
+router.get('/signup-admin', getAdminSignupForm);
+
+router.get('/login-admin', getAdminLoginForm);
 
 
 module.exports = router;
