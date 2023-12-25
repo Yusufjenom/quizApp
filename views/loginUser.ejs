@@ -12,17 +12,44 @@
     <div class="login-form">
         <h1>Login User</h1>
         <form>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
+            <p class="errorEmail" style="color: red; font-family: cursive; font-size: smaller; margin-top: 0;"></p>
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
+            <p class="errorPassword" style="color: red; font-family: cursive; font-size: smaller; margin-top: 0;"></p>
 
             <button type="submit">Log In</button>
         </form>
-        <p>Don't have an account? <a href="#">Sign up here</a></p>
+        <p>Don't have an account? <a href="/api/v1/signup-user">Sign up here</a></p>
     </div>
 </section>
 
+<script>
+    const form = document.querySelector('form');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.querySelector("#email").value;
+        const password = document.querySelector("#password").value;
+        const errorEmail = document.querySelector('.errorEmail');
+        const errorPassword = document.querySelector('.errorPassword');
+
+        const response = await fetch("/api/v1/login-user", {
+            method: "POST",
+            headers: {"Content-Type" : "application/json"},
+            body: JSON.stringify({email, password})
+        });
+        const data = await response.json();
+
+        if(data.success == true){
+            window.location.assign('/')
+        }else{
+            errorEmail.textContent = data.error.email;
+            errorPassword.textContent = data.error.password;
+        }
+    })
+</script>
 </body>
 </html>
