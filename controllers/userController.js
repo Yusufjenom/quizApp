@@ -23,13 +23,14 @@ const getQuestions = async (req, res) => {
 const submitAnswers = async (req, res) => {
     try {
         const data = req.body;
+        const courseId = req.cookies.currentCourseId;
+        console.log(courseId);
         console.log(data)
         const newAns = Object.values(data);
         console.log(newAns);
 
-        //get correct answers from db
-        const questions = await QuestionAndAnswerModel.find();
-        const displayQuestions = questions[0].qAnda[0];
+        const questions = await QuestionAndAnswerModel.findById(courseId);
+        const displayQuestions = questions.qAnda[0];
         let ans = [];
         let x = Object.values(displayQuestions);
         for (item of x) {
@@ -100,7 +101,6 @@ const loginUser = async (req, res) => {
                 await jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: period },
                     async (err, token) => {
                         if (token) {
-                            console.log("logged")
                             res.cookie("userToken", token);
                             res.status(200).json({
                                 success: true,
@@ -153,7 +153,7 @@ const getUserLoginForm = async (req, res) => {
 const getCoursesList = async (req, res) => {
     try {
         const questions = await QuestionAndAnswerModel.find();
-        res.status(200).render("listOfCourses", {questions});
+        res.status(200).render("listOfCourses", { questions });
     }
     catch (err) {
         console.log(err.message)
@@ -161,17 +161,39 @@ const getCoursesList = async (req, res) => {
 };
 
 const getACourseByCourseId = async (req, res) => {
-    try{
-      const {id} = req.params;
-      console.log(id)
-      const course = await QuestionAndAnswerModel.findById(id);
-      console.log(course)
-      const displayQuestions = course.qAnda[0];
-      //console.log(displayQuestions);
-      res.status(200).render("viewQuestions", { displayQuestions });
+    try {
+        const { id } = req.params;
+        const course = await QuestionAndAnswerModel.findById(id);
+        //   console.log(course)
+        const displayQuestions = course.qAnda[0];
+        //console.log(displayQuestions);
+        res.cookie('currentCourseId', id);
+        res.status(200).render("viewQuestions", { displayQuestions });
     }
-    catch(err){
+    catch (err) {
         console.log(err.message)
+    }
+};
+
+const getUserDashboard = async (req, res) => {
+    try {
+        const userToken = req.cookies.userToken;
+        const verifiedToken = jwt.verify(userToken, process.env.JWT_SECRET);
+        const id = verifiedToken.id;
+        const currentUser = await UserModel.findById(id)
+        res.status(200).render("userDashboard", {currentUser});
+    }
+    catch (err) {
+        console.log(err.message)
+    }
+};
+
+const userResult = async (req, res) => {
+    try {
+        res.status(200).render("userResult")
+    }
+    catch (err) {
+        console.log(err.message);
     }
 };
 
@@ -183,5 +205,7 @@ module.exports = {
     getUserSignUpForm,
     getUserLoginForm,
     getCoursesList,
-    getACourseByCourseId
+    getACourseByCourseId,
+    getUserDashboard,
+    userResult
 };
