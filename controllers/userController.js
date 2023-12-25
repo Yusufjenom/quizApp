@@ -1,5 +1,6 @@
 const { QuestionAndAnswerModel } = require('../models/Q & A/q&aModel');
 const { UserModel } = require('../models/users/userModel');
+const {ResultModel} = require('../models/results/resultModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { errorHandler } = require('../utils/errors/errorHandler');
@@ -24,11 +25,15 @@ const submitAnswers = async (req, res) => {
     try {
         const data = req.body;
         const courseId = req.cookies.currentCourseId;
+        const userToken = req.cookies.userToken;
+        const userId = jwt.verify(userToken, process.env.JWT_SECRET).id;
+        console.log(userId);
         console.log(courseId);
         console.log(data)
         const newAns = Object.values(data);
         console.log(newAns);
-
+        const totalQuestions = newAns.length;
+        console.log(totalQuestions);
         const questions = await QuestionAndAnswerModel.findById(courseId);
         const displayQuestions = questions.qAnda[0];
         let ans = [];
@@ -47,9 +52,14 @@ const submitAnswers = async (req, res) => {
                 count++
             }
         }
+
         console.log(count)
+        const resultInPercentage = (count / totalQuestions) * 100;
+        const finalResult = resultInPercentage + '%';
+        await UserModel.findOneAndUpdate({_id : userId}, { $set: { currentResult: finalResult}});
+        // await ResultModel.create({id: userId, results: [{}]})
         res.status(200).json({
-            redirect: "/"
+            redirect: "/api/v1/user-result"
         });
     }
     catch (err) {
@@ -164,9 +174,7 @@ const getACourseByCourseId = async (req, res) => {
     try {
         const { id } = req.params;
         const course = await QuestionAndAnswerModel.findById(id);
-        //   console.log(course)
         const displayQuestions = course.qAnda[0];
-        //console.log(displayQuestions);
         res.cookie('currentCourseId', id);
         res.status(200).render("viewQuestions", { displayQuestions });
     }
@@ -190,7 +198,11 @@ const getUserDashboard = async (req, res) => {
 
 const userResult = async (req, res) => {
     try {
-        res.status(200).render("userResult")
+        const userToken = req.cookies.userToken;
+        const userId = jwt.verify(userToken, process.env.JWT_SECRET).id
+        const user = await UserModel.findById(userId);
+        const score = user.currentResult[0];
+        res.status(200).render("userResult", {score, user});
     }
     catch (err) {
         console.log(err.message);
