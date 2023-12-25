@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/userDashboard.css">
+    <title>User Dashboard</title>
+</head>
+<body>
+
+<section class="dashboard">
+    <div class="user-info">
+        <h1>Welcome, <%=currentUser.name%></h1>
+        <p>Email: <%=currentUser.email%></p>
+    </div>
+
+    <div class="actions">
+        <div class="action-box">
+            <h2>Start a Quiz</h2>
+            <a href="/api/v1/select-course" class="quiz-link">Start Now</a>
+        </div>
+        
+        <div class="action-box">
+            <h2>View Quiz Results</h2>
+            <a href="/api/v1/user-result" class="quiz-link">View Results</a>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

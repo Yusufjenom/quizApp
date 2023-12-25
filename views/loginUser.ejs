@@ -44,7 +44,7 @@
         const data = await response.json();
 
         if(data.success == true){
-            window.location.assign('/')
+            window.location.assign('/api/v1/user-dashboard')
         }else{
             errorEmail.textContent = data.error.email;
             errorPassword.textContent = data.error.password;
