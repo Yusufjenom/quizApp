@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/listOfCourses.css">
+    <title>Quiz Subjects</title>
+</head>
+<body>
+
+<section class="quiz-subjects">
+    <h1>Choose a Subject</h1>
+    <ul>
+        <% questions.forEach(course => { %>
+            <li><a href="/api/v1/questions/<%=course._id%>"><%=course.qAnda[0].courseTitle.toUpperCase()%></a></li>
+        <%})%>
+        
+        <!-- <li><a href="#">Science</a></li>
+        <li><a href="#">History</a></li>
+        <li><a href="#">Literature</a></li>
+        <li><a href="#">Computer Science</a></li> -->
+        <!-- Add more subjects as needed -->
+    </ul>
+</section>
+
+</body>
+</html>
