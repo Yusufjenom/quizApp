@@ -1,8 +1,11 @@
 const { QuestionAndAnswerModel } = require('../models/Q & A/q&aModel');
-const {UserModel} = require('../models/users/userModel');
+const { UserModel } = require('../models/users/userModel');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const {errorHandler} = require('../utils/errors/errorHandler');
 
 
-
+const period = 60 * 60 * 24;
 //DISPLAY QUESTIONS
 const getQuestions = async (req, res) => {
     try {
@@ -38,12 +41,12 @@ const submitAnswers = async (req, res) => {
 
         //Marking and score algo 
         let count = 0;
-        for(let i = 0; i < newAns.length; i++){
-            if(newAns[i] == ans[i]){
-                count ++
+        for (let i = 0; i < newAns.length; i++) {
+            if (newAns[i] == ans[i]) {
+                count++
             }
         }
-         console.log(count)
+        console.log(count)
         res.status(200).json({
             redirect: "/"
         });
@@ -54,89 +57,104 @@ const submitAnswers = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
-    try{
-      const {email, password, name} = req.body;
-
-      const salt = await bcrypt.genSalt(10)
-      const hashedPassword = await bcrypt.hash(password, salt);
-      const newUser = new UserModel({
-        email,
-        name,
-        password: hashedPassword
-      });
-      const savedUser = await newUser.save();
-      res.status(201).json({
-        success: true,
-        savedUser
-      })
-
+    try {
+        const { email, password, name } = req.body;
+        const userExist = await UserModel.findOne({ email });
+        if (!userExist) {
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(password, salt);
+            const newUser = new UserModel({
+                email,
+                name,
+                password: hashedPassword
+            });
+            const savedUser = await newUser.save();
+            res.status(201).json({
+                success: true,
+                savedUser
+            })
+        } else {
+            throw new Error("this email is already registered");
+        }
     }
-    catch(err){
-        console.log(err.message);
+    catch (err) {
+        //console.log(err.message);
+        const error = errorHandler(err);
+        //console.log(error);
+        return res.status(400).json({
+            success: false,
+            error
+        });
     }
 };
 
 
 const loginUser = async (req, res) => {
-    try{
-     const {email, password} = req.body;
-     const user = await UserModel.findOne({email});
-
-     if(user){
-       const isPassword = await bcrypt.compare(password, user.password);
-
-       if(isPassword){
-        const token = await jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: period});
-        if(token){
-            res.cookie("userToken", token);
-            res.status(200).json({
-                success: true,
-                user,
-            })
+    try {
+        const { email, password } = req.body;
+        const user = await UserModel.findOne({ email });
+        
+        if (user) {
+            const isPassword = await bcrypt.compare(password, user.password);       
+            if (isPassword) {
+              await jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: period },
+                 async (err, token) => {
+                    if (token) {
+                        console.log("logged")
+                        res.cookie("userToken", token);
+                        res.status(200).json({
+                            success: true,
+                            user,
+                        })
+                    }
+                    else {
+                        throw new Error(err.message)
+                    }
+              })
+                
+            }
+            else {
+                throw new Error("incorrect password");
+            }
         }
-        else{
-            throw new Error("invalid token")
+        else {
+            throw new Error("invalid email address");
         }
-       }
-       else{
-        throw new Error("incorrect password");
-       }
-     }
-     else{
-        throw new Error("invalid email address");
-     }
     }
-    catch(err){
-        console.log(err.message)
+    catch (err) {
+        //console.log(err.message)
+        const error = errorHandler(err);
+        console.log(error)
         res.status(400).json({
             success: false,
-            message: err.message
+            error
         })
     }
 };
 
 const getUserSignUpForm = async (req, res) => {
-    try{
-     res.status(200).render("signupUser");
+    try {
+        res.status(200).render("signupUser");
     }
-    catch(err){
+    catch (err) {
         console.log(err.message)
     }
 };
 
 const getUserLoginForm = async (req, res) => {
-    try{
-     res.status(200).render("loginUser");
+    try {
+        res.status(200).render("loginUser");
     }
-    catch(err){
+    catch (err) {
         console.log(err.message)
     }
 };
 
-module.exports = { getQuestions,
-                   submitAnswers,
-                   createUser,
-                   loginUser,
-                   getUserSignUpForm,
-                   getUserLoginForm 
-                 };
+module.exports = {
+    getQuestions,
+    submitAnswers,
+    createUser,
+    loginUser,
+    getUserSignUpForm,
+    getUserLoginForm
+};
