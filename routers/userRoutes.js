@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const {verifyUser} = require('../middlewares/userAuth');
 const {getQuestions,
         submitAnswers,
         createUser,
@@ -6,12 +7,14 @@ const {getQuestions,
         getUserSignUpForm,
         getUserLoginForm,
         getCoursesList,
-        getACourseByCourseId
+        getACourseByCourseId,
+        getUserDashboard,
+        userResult
      } = require('../controllers/userController');
 
-router.get('/questions/:id', getACourseByCourseId);  //getQuestions
+router.get('/questions/:id', verifyUser, getACourseByCourseId);  //getQuestions
 
-router.post('/answers', submitAnswers);
+router.post('/answers', verifyUser, submitAnswers);
 
 router.post('/signup-user', createUser);
 
@@ -21,6 +24,10 @@ router.get('/signup-user', getUserSignUpForm);
 
 router.get('/login-user', getUserLoginForm);
 
-router.get('/select-course', getCoursesList);
+router.get('/select-course', verifyUser, getCoursesList);
+
+router.get('/user-dashboard', verifyUser, getUserDashboard);
+
+router.get('/user-result', verifyUser, userResult);
 
 module.exports = router;
