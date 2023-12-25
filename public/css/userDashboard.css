@@ -11,6 +11,7 @@ body {
     height: 100vh;
     flex-direction: column;
     text-align: center;
+    padding: 2rem;
 }
 
 .user-info {
@@ -19,6 +20,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    margin-top: 3rem;
 }
 
 .actions {
