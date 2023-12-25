@@ -4,10 +4,12 @@ const {getQuestions,
         createUser,
         loginUser,
         getUserSignUpForm,
-        getUserLoginForm
+        getUserLoginForm,
+        getCoursesList,
+        getACourseByCourseId
      } = require('../controllers/userController');
 
-router.get('/questions', getQuestions);
+router.get('/questions/:id', getACourseByCourseId);  //getQuestions
 
 router.post('/answers', submitAnswers);
 
@@ -18,5 +20,7 @@ router.post('/login-user', loginUser);
 router.get('/signup-user', getUserSignUpForm);
 
 router.get('/login-user', getUserLoginForm);
+
+router.get('/select-course', getCoursesList);
 
 module.exports = router;
