@@ -6,13 +6,17 @@ async function verifyUser(req, res, next){
       if(token){
         const verifiedToken = await jwt.verify(token, process.env.JWT_SECRET);
         if(verifiedToken){
+          //console.log(verifiedToken)
             next();
         }
+        //next();
+      }else{
+        return res.redirect("/api/v1/login-user");
       }
-      res.redirect("/login-user")
     }
     catch(err){
         console.log(err.message);
+       
     }
 };
 
