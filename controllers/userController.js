@@ -209,6 +209,16 @@ const userResult = async (req, res) => {
     }
 };
 
+const logoutUser = async (req, res) => {
+    try{
+      res.cookie("userToken", "")
+      res.redirect("/api/v1/login-user");
+    }
+    catch(err){
+        console.log(err.message)
+    }
+};
+
 module.exports = {
     getQuestions,
     submitAnswers,
@@ -219,5 +229,6 @@ module.exports = {
     getCoursesList,
     getACourseByCourseId,
     getUserDashboard,
-    userResult
+    userResult,
+    logoutUser
 };
