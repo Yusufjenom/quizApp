@@ -52,7 +52,7 @@ function createQuestionElement(index) {
 
 // Function to add questions to the form
 function addQuestionsToForm() {
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 10; i++) {
         questionsContainer.appendChild(createQuestionElement(i));
     }
 }
