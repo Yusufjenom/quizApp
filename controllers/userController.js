@@ -27,13 +27,8 @@ const submitAnswers = async (req, res) => {
         const courseId = req.cookies.currentCourseId;
         const userToken = req.cookies.userToken;
         const userId = jwt.verify(userToken, process.env.JWT_SECRET).id;
-        console.log(userId);
-        console.log(courseId);
-        console.log(data)
         const newAns = Object.values(data);
-        console.log(newAns);
         const totalQuestions = newAns.length;
-        console.log(totalQuestions);
         const questions = await QuestionAndAnswerModel.findById(courseId);
         const displayQuestions = questions.qAnda[0];
         let ans = [];
@@ -43,7 +38,7 @@ const submitAnswers = async (req, res) => {
                 ans.push(item)
             }
         };
-        console.log(ans)
+        
 
         //Marking and score algo 
         let count = 0;
@@ -175,6 +170,7 @@ const getACourseByCourseId = async (req, res) => {
         const { id } = req.params;
         const course = await QuestionAndAnswerModel.findById(id);
         const displayQuestions = course.qAnda[0];
+        //console.log(displayQuestions)
         res.cookie('currentCourseId', id);
         res.status(200).render("viewQuestions", { displayQuestions });
     }
