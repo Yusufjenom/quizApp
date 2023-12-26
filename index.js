@@ -6,6 +6,9 @@ const {connectToDatabase} = require('./database/db');
 const adminRoutes = require('./routers/adminRoutes');
 const generalRoutes = require('./routers/generalRoute');
 const userRoutes = require('./routers/userRoutes');
+const jwt = require('jsonwebtoken');
+const {UserModel} = require('./models/users/userModel');
+const {AdminModel} = require('./models/admin/adminModel');
 
 
 const port = process.env.PORT || 8080;
@@ -27,9 +30,25 @@ app.use('/api/v1', userRoutes);
 
 
 //GET THE LANDING PAGE
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   try{
-    res.status(200).render("landingPage");
+   const userToken = req.cookies.userToken;
+   const adminToken = req.cookies.adminToken;
+     
+   let user;
+   let admin;
+   if(userToken){
+    const userId = await jwt.verify(userToken, process.env.JWT_SECRET).id;
+     user = await UserModel.findById(userId);
+    // console.log(user)
+   }
+
+   if(adminToken){
+    const adminId = await jwt.verify(adminToken, process.env.JWT_SECRET).id;
+     admin = await AdminModel.findById(adminId);
+   }
+  //  console.log(user)
+    res.status(200).render("landingPage", {user, admin});
  }
  catch(err){
      console.log(err.message);
