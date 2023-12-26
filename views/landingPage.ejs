@@ -24,11 +24,22 @@
 <section class="hero">
     <h1>Welcome to the Quiz App</h1>
     <p>Test your knowledge with fun quizzes!</p>
-    <div class="buttons">
-        <button class="cta-button">Register</button>
-        <button class="cta-button">User Login</button>
-        <button class="cta-button">Admin Login</button>
-    </div>
+
+    <% if(admin || user){%>
+        <div class="buttons">
+            <a class="cta-button" style="text-decoration: none;" href="/api/v1/logout-user">Logout</a>
+            <a class="cta-button">Your Dashboard</a>
+            <!-- <button class="cta-button">Admin Login</button> -->
+        </div>
+    <%}else{%>
+        <div class="buttons">
+            <a class="cta-button" style="text-decoration: none;" href="/api/v1/signup-user">Register</a>
+            <a class="cta-button" style="text-decoration: none;" href="/api/v1/login-user">User Login</a>
+            <a class="cta-button" style="text-decoration: none;" href="/api/v1/login-admin">Admin Login</a>
+        </div>
+
+    <%}%> 
+    
 </section>
 <footer>
     <%- include("partials/footer"); -%>
