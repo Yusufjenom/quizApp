@@ -4,7 +4,8 @@ const {uploadQuestionsAndAnswers,
             createAdmin,
             loginAdmin,
             getAdminSignupForm,
-            getAdminLoginForm
+            getAdminLoginForm,
+            adminDashboard
         } = require('../controllers/adminController');
 
 
@@ -23,6 +24,8 @@ router.post('/login-admin', loginAdmin);
 router.get('/signup-admin', getAdminSignupForm);
 
 router.get('/login-admin', getAdminLoginForm);
+
+router.get('/admin-dashboard', adminDashboard);
 
 
 module.exports = router;
