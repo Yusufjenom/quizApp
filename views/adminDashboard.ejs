@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/adminDashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Admin Dashboard</title>
 </head>
 <body>
@@ -14,11 +15,10 @@
 
 <aside class="sidebar">
     <ul>
-        <li><a href="#">Dashboard</a></li>
-        <li><a href="#">Students</a></li>
-        <li><a href="#">Courses</a></li>
+        <li><a href="/api/v1/upload-questions-answers">Upload Courses</a></li>
+        <li><a href="/api/v1/users">Users</a></li>
         <li><a href="#">Performance</a></li>
-        <li><a href="#">Settings</a></li>
+        <li><a href="/api/v1/logout-admin" style="color: red;">Log Out</a></li>
     </ul>
 </aside>
 
