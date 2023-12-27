@@ -140,9 +140,12 @@
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(result)
             });
-            let data = await res.json();
-            window.location.href = data.redirect;
-            console.log(data)
+             await res.json()
+             .then(data => {
+                window.location.href = data.redirect;
+                console.log(data)
+             })
+            
         })
 
     </script>
