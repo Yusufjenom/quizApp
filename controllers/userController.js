@@ -1,12 +1,15 @@
 const { QuestionAndAnswerModel } = require('../models/Q & A/q&aModel');
 const { UserModel } = require('../models/users/userModel');
-const {ResultModel} = require('../models/results/resultModel');
+const { ResultModel } = require('../models/results/resultModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { errorHandler } = require('../utils/errors/errorHandler');
 
 
 const period = 60 * 60 * 24;
+async function uploadToResultCollection(userId, questions, finalResult) {
+    await ResultModel.create({ id: userId, results: [{ courseTitle: questions.qAnda[0].courseTitle, finalResult }] })
+}
 //DISPLAY QUESTIONS
 const getQuestions = async (req, res) => {
     try {
@@ -26,7 +29,7 @@ const submitAnswers = async (req, res) => {
         const data = req.body;
         const courseId = req.cookies.currentCourseId;
         const userToken = req.cookies.userToken;
-        const userId = jwt.verify(userToken, process.env.JWT_SECRET).id;
+        const userId = await jwt.verify(userToken, process.env.JWT_SECRET).id;
         const newAns = Object.values(data);
         const totalQuestions = newAns.length;
         const questions = await QuestionAndAnswerModel.findById(courseId);
@@ -38,7 +41,7 @@ const submitAnswers = async (req, res) => {
                 ans.push(item)
             }
         };
-        
+
 
         //Marking and score algo 
         let count = 0;
@@ -48,11 +51,12 @@ const submitAnswers = async (req, res) => {
             }
         }
 
-        console.log(count)
         const resultInPercentage = (count / totalQuestions) * 100;
         const finalResult = resultInPercentage + '%';
-        await UserModel.findOneAndUpdate({_id : userId}, { $set: { currentResult: finalResult}});
-        // await ResultModel.create({id: userId, results: [{}]})
+        await UserModel.findOneAndUpdate({ _id: userId }, { $set: { currentResult: finalResult } });
+        setTimeout(() => {
+            uploadToResultCollection(userId, questions, finalResult);
+        }, 2000)
         res.status(200).json({
             redirect: "/api/v1/user-result"
         });
@@ -185,7 +189,7 @@ const getUserDashboard = async (req, res) => {
         const verifiedToken = jwt.verify(userToken, process.env.JWT_SECRET);
         const id = verifiedToken.id;
         const currentUser = await UserModel.findById(id)
-        res.status(200).render("userDashboard", {currentUser});
+        res.status(200).render("userDashboard", { currentUser });
     }
     catch (err) {
         console.log(err.message)
@@ -198,7 +202,7 @@ const userResult = async (req, res) => {
         const userId = jwt.verify(userToken, process.env.JWT_SECRET).id
         const user = await UserModel.findById(userId);
         const score = user.currentResult[0];
-        res.status(200).render("userResult", {score, user});
+        res.status(200).render("userResult", { score, user });
     }
     catch (err) {
         console.log(err.message);
@@ -206,11 +210,11 @@ const userResult = async (req, res) => {
 };
 
 const logoutUser = async (req, res) => {
-    try{
-      res.cookie("userToken", "")
-      res.redirect("/api/v1/login-user");
+    try {
+        res.cookie("userToken", "")
+        res.redirect("/api/v1/login-user");
     }
-    catch(err){
+    catch (err) {
         console.log(err.message)
     }
 };
