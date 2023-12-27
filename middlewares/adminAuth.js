@@ -8,11 +8,14 @@ async function verifyAdmin(req, res, next){
         if(verifiedToken){
             next();
         }
+      }else{
+        res.redirect("/api/v1/login-admin")
       }
-      res.redirect("/login-admin")
+      
     }
     catch(err){
         console.log(err.message);
+        
     }
 };
 
