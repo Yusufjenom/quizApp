@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Math', 'Science', 'History', 'Literature'],
+            labels: ['Mathematics', 'English', 'JavaScript', 'HTML'],
             datasets: [{
                 label: 'Average Score',
                 data: [85, 92, 78, 88],
