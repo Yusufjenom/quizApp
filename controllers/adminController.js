@@ -1,5 +1,6 @@
 const { QuestionAndAnswerModel } = require('../models/Q & A/q&aModel');
 const { AdminModel } = require('../models/admin/adminModel');
+const {UserModel} = require('../models/users/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { errorHandler } = require('../utils/errors/errorHandler');
@@ -128,12 +129,33 @@ const getAdminLoginForm = async (req, res) => {
 
 const adminDashboard = async (req, res) => {
     try {
+       
         res.status(200).render("adminDashboard");
     }
     catch (err) {
         console.log(err.message);
     }
 };
+
+const getAllUsers = async (req, res) => {
+    try{
+        const users = await UserModel.find();
+       res.status(200).render("allUsers", {users})
+    }
+    catch(err){
+        console.log(err.message);
+    }
+};
+
+const logoutAdmin = async (req, res) => {
+    try{
+      res.cookie("adminToken", "");
+      res.redirect("/api/v1/login-admin");
+    }
+    catch(err){
+        console.log(err.message)
+    }
+}
 
 module.exports = {
     uploadQuestionsAndAnswers,
@@ -142,5 +164,7 @@ module.exports = {
     loginAdmin,
     getAdminSignupForm,
     getAdminLoginForm,
-    adminDashboard
+    adminDashboard,
+    getAllUsers,
+    logoutAdmin
 };
