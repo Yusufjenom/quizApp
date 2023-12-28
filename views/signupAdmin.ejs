@@ -22,6 +22,8 @@
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
+            <p class="errorPassword" style="color: red; font-family: cursive; font-size: smaller; margin-top: 0;"></p>
+
 
             <button type="submit">Sign Up</button>
         </form>
@@ -37,6 +39,7 @@
         const email = document.querySelector('#email').value;
         const password = document.querySelector('#password').value;
         const error = document.querySelector(".error");
+        const errorPassword = document.querySelector(".errorPassword");
 
         let response = await fetch("/api/v1/signup-admin", {
             method: "POST",
@@ -48,6 +51,7 @@
           window.location.assign('/');
         }else{
             error.textContent = data.error.email;
+            errorPassword.textContent = data.error.password;
         }
     });
 </script>
