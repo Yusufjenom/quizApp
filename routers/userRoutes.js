@@ -11,7 +11,8 @@ const {getQuestions,
         getACourseByCourseId,
         getUserDashboard,
         userResult,
-        logoutUser
+        logoutUser,
+        getAllResults
      } = require('../controllers/userController');
 
 router.get('/questions/:id', verifyUser, getACourseByCourseId);  //getQuestions
@@ -33,5 +34,7 @@ router.get('/user-dashboard', verifyUser, getUserDashboard);
 router.get('/user-result', verifyUser, userResult);
 
 router.get('/logout-user', logoutUser);
+
+router.get('/results', verifyUser, getAllResults);
 
 module.exports = router;
