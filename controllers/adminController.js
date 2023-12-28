@@ -58,7 +58,6 @@ const createAdmin = async (req, res) => {
 
     }
     catch (err) {
-        //console.log(err.message);
         const error = errorHandler(err);
         console.log(error);
         return res.status(400).json({
