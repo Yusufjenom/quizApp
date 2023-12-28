@@ -219,6 +219,26 @@ const logoutUser = async (req, res) => {
     }
 };
 
+
+const getAllResults = async (req, res) => {
+    try{
+    const userToken = req.cookies.userToken;
+    const userId = await jwt.verify(userToken, process.env.JWT_SECRET).id;
+    const results = await ResultModel.find();
+    let resultsContainer = new Array();
+    for(let result of results){
+        if(result.id == userId){
+           resultsContainer.push( result.results)
+        }
+    }
+    res.status(200).render("viewAllResults", {resultsContainer});
+    //console.log(results)
+    }
+    catch(err){
+        console.log(err.message)
+    }
+}
+
 module.exports = {
     getQuestions,
     submitAnswers,
@@ -230,5 +250,6 @@ module.exports = {
     getACourseByCourseId,
     getUserDashboard,
     userResult,
-    logoutUser
+    logoutUser,
+    getAllResults
 };
