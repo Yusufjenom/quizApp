@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/viewAllResults.css">
+    <title>Student Scores</title>
+</head>
+<body>
+
+<section class="student-scores">
+    <h1>Your Scores</h1>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject/Course</th>
+                    <th>Score</th>
+                    <!-- <th>Science</th>
+                    <th>History</th>
+                    <th>Literature</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <% resultsContainer.forEach(result => {%>
+                    <tr>
+                        <td><%=result[0].courseTitle%></td>
+                        <td><%=result[0].finalResult%></td>
+                    </tr>
+
+                <%})%>
+                
+                <!-- <tr>
+                    <td>Jane Smith</td>
+                    <td>88</td>
+                    <td>94</td>
+                    <td>85</td>
+                    <td>90</td>
+                </tr>
+                <tr>
+                    <td>Bob Johnson</td>
+                    <td>75</td>
+                    <td>82</td>
+                    <td>88</td>
+                    <td>80</td>
+                </tr> -->
+               
+            </tbody>
+        </table>
+    </div>
+</section>
+
+</body>
+</html>
