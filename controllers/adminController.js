@@ -154,6 +154,30 @@ const logoutAdmin = async (req, res) => {
     catch(err){
         console.log(err.message)
     }
+};
+
+const viewAllCourses = async (req, res) => {
+    try{
+        const questions = await QuestionAndAnswerModel.find();
+       res.status(200).render("listCoursesAdmin", {questions});
+    }
+    catch(err){
+        console.log(err.message);
+    }
+};
+
+const deleteACourse = async (req, res) => {
+    try{
+     const {id} = req.params;
+     const deletedCourse = await QuestionAndAnswerModel.findByIdAndDelete(id);
+     res.status(200).json({
+        success: true,
+        message: {redirect: "/api/v1/courses"}
+     });
+    }
+    catch(err){
+        console.log(err.message)
+    }
 }
 
 module.exports = {
@@ -165,5 +189,7 @@ module.exports = {
     getAdminLoginForm,
     adminDashboard,
     getAllUsers,
-    logoutAdmin
+    logoutAdmin,
+    viewAllCourses,
+    deleteACourse
 };
