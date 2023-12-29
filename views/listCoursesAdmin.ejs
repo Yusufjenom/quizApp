@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/listOfCourses.css">
+    <title>Quiz Subjects</title>
+</head>
+
+<body>
+
+    <section class="quiz-subjects">
+        <h1>Choose a Subject</h1>
+        <ul>
+            <% questions.forEach(course=> { %>
+                <li>
+                    <a href="/api/v1/questions/<%=course._id%>">
+                        <%=course.qAnda[0].courseTitle.toUpperCase()%>
+                    </a>
+                    <a data-delete="<%=course._id%>"
+                         href="" style="background-color: red;"
+                         class="deletBtn"
+                         >
+                        delete
+                    </a>
+                </li>
+                <%})%>
+
+        </ul>
+    </section>
+    <script>
+        const deletBtn = document.querySelector(".deletBtn");
+        deletBtn.addEventListener('click', async () => {
+            let response = await fetch(`/api/v1/delete-course/${deletBtn.dataset.delete}`, {
+                method: "DELETE"
+            });
+            let result = await response.json();
+            window.location.href = result.message.redirect
+        })
+    </script>
+</body>
+
+</html>
