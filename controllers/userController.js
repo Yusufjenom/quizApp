@@ -201,7 +201,7 @@ const userResult = async (req, res) => {
         const userToken = req.cookies.userToken;
         const userId = jwt.verify(userToken, process.env.JWT_SECRET).id
         const user = await UserModel.findById(userId);
-        const score = user.currentResult[0];
+        const score = user.currentResult[0].replace('%', "");
         res.status(200).render("userResult", { score, user });
     }
     catch (err) {
