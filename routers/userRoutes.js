@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const {verifyUser} = require('../middlewares/userAuth');
+const {verifyAdmin} = require('../middlewares/adminAuth')
 const {setCache} = require('../middlewares/cache-control');
 const {getQuestions,
         submitAnswers,
