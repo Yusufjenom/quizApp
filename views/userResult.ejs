@@ -12,16 +12,18 @@
     <h1>Quiz Result</h1>
     
     <div class="result-box">
-        <h2>Nice Attempt on the Quiz <%=user.name%></h2>
-        <p>Your Score: <span class="score"><%=score%></span></p>
+       
+        <% if( score > 50 && score < 75){%>
+            <h2>You performed good but you can do better <%=user.name%></h2>
+        <%}else if(score > 75){%>
+            <h2>Your performed excellently <%=user.name%> keep it up</h2>
+        <%}else{%>
+            <h2>You performed poorly try again <%=user.name%></h2>
+        <%}%>
+            
+        <p>Your Score: <span class="score"><%=score%>%</span></p>
     </div>
 
-    <!-- <div class="result-box">
-        <h2>Science Quiz Result</h2>
-        <p>Your Score: <span class="score">92%</span></p>
-    </div> -->
-
-    <!-- Add more result boxes as needed -->
 </section>
 
 </body>
