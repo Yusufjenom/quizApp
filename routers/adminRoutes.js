@@ -9,7 +9,9 @@ const {uploadQuestionsAndAnswers,
             getAdminLoginForm,
             adminDashboard,
             getAllUsers,
-            logoutAdmin
+            logoutAdmin,
+            viewAllCourses,
+            deleteACourse
         } = require('../controllers/adminController');
 
 
@@ -34,6 +36,10 @@ router.get('/admin-dashboard',verifyAdmin, setCache, adminDashboard);
 router.get('/users', verifyAdmin, setCache, getAllUsers);
 
 router.get('/logout-admin', logoutAdmin);
+
+router.get('/courses',verifyAdmin, viewAllCourses);
+
+router.delete('/delete-course/:id', verifyAdmin, deleteACourse);
 
 
 module.exports = router;
