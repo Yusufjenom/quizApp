@@ -57,12 +57,5 @@ function addQuestionsToForm() {
     }
 }
 
-// Event listener for form submission
-// form.addEventListener('submit', function (event) {
-//     event.preventDefault();
-//     // Add your logic for form submission here
-//     console.log('Form submitted!');
-// });
 
-// Initialize the form with questions
 addQuestionsToForm();

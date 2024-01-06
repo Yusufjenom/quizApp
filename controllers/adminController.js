@@ -4,6 +4,8 @@ const {UserModel} = require('../models/users/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { errorHandler } = require('../utils/errors/errorHandler');
+const {tryCatch} = require('../utils/tryCatch');
+const {HandleError} = require('../utils/errors/errors');
 
 const period = 60 * 60 * 24;
 //GET QUESTIONS AND ANSWER UPLOAD FORM
@@ -68,7 +70,7 @@ const createAdmin = async (req, res) => {
 };
 
 
-const loginAdmin = async (req, res) => {
+const loginAdmin = tryCatch(async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await AdminModel.findOne({ email });
@@ -86,19 +88,20 @@ const loginAdmin = async (req, res) => {
                     })
                 }
                 else {
-                    throw new Error("invalid token");
+                    throw new HandleError(400,"invalid token", 400);
                 }
             }
             else {
-                throw new Error("incorrect password");
+                throw new HandleError(400, "incorrect password", 400);
             }
         }
         else {
-            throw new Error("invalid email address");
+            throw new HandleError(400, "invalid email address", 400);
         }
     }
     catch (err) {
         //console.log(err.message)
+        //next(err)
         const error = errorHandler(err);
         console.log(error);
         res.status(400).json({
@@ -106,7 +109,7 @@ const loginAdmin = async (req, res) => {
             error
         });
     };
-};
+})
 
 const getAdminSignupForm = async (req, res) => {
     try {
@@ -126,15 +129,10 @@ const getAdminLoginForm = async (req, res) => {
     }
 };
 
-const adminDashboard = async (req, res) => {
-    try {
-       
+const adminDashboard = tryCatch(async (req, res) => {
         res.status(200).render("adminDashboard");
-    }
-    catch (err) {
-        console.log(err.message);
-    }
-};
+    
+});
 
 const getAllUsers = async (req, res) => {
     try{

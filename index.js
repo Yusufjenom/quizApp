@@ -9,6 +9,7 @@ const userRoutes = require('./routers/userRoutes');
 const jwt = require('jsonwebtoken');
 const {UserModel} = require('./models/users/userModel');
 const {AdminModel} = require('./models/admin/adminModel');
+const {handleErrorMiddleware} = require('./middlewares/catchError');
 
 
 const port = process.env.PORT || 8080;
@@ -55,6 +56,8 @@ app.get('/', async (req, res) => {
  }
 });
 
+
+app.use(handleErrorMiddleware);
 
 //SPINNING DEV PORT AND CONNECTING TO DATABASE
 (async function(){

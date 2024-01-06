@@ -41,7 +41,8 @@ const submitAnswers = async (req, res) => {
                 ans.push(item)
             }
         };
-
+       console.log(newAns)
+       console.log(ans)
 
         //Marking and score algo 
         let count = 0;
