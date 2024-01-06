@@ -3,7 +3,6 @@ const { AdminModel } = require('../models/admin/adminModel');
 const {UserModel} = require('../models/users/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { errorHandler } = require('../utils/errors/errorHandler');
 const {tryCatch} = require('../utils/tryCatch');
 const {HandleError} = require('../utils/errors/errors');
 
@@ -71,7 +70,6 @@ const createAdmin = async (req, res) => {
 
 
 const loginAdmin = tryCatch(async (req, res) => {
-    try {
         const { email, password } = req.body;
         const user = await AdminModel.findOne({ email });
 
@@ -99,17 +97,8 @@ const loginAdmin = tryCatch(async (req, res) => {
             throw new HandleError(400, "invalid email address", 400);
         }
     }
-    catch (err) {
-        //console.log(err.message)
-        //next(err)
-        const error = errorHandler(err);
-        console.log(error);
-        res.status(400).json({
-            success: false,
-            error
-        });
-    };
-})
+
+)
 
 const getAdminSignupForm = async (req, res) => {
     try {
