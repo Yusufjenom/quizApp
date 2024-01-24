@@ -8,18 +8,12 @@ const {HandleError} = require('../utils/errors/errors');
 
 const period = 60 * 60 * 24;
 //GET QUESTIONS AND ANSWER UPLOAD FORM
-const getQA = async (req, res) => {
-    try {
+const getQA = tryCatch(async (req, res) => {
         res.status(200).render("uploadQuestionsAndAnswers.ejs");
-    }
-    catch (err) {
-        console.log(err.message);
-    }
-};
+});
 
 //UPLOADING BOTH QUESTIONS AND ANSWERS
-const uploadQuestionsAndAnswers = async (req, res) => {
-    try {
+const uploadQuestionsAndAnswers = tryCatch(async (req, res) => {
         const data = req.body;
         const newUpload = new QuestionAndAnswerModel({
             qAnda: data
@@ -27,15 +21,10 @@ const uploadQuestionsAndAnswers = async (req, res) => {
         const savedQuestionsAndAnswer = await newUpload.save();
         //console.log(savedQuestionsAndAnswer);
         res.status(201).redirect("/");
-    }
-    catch (err) {
-        console.log(err)
-    }
-};
+});
 
 
-const createAdmin = async (req, res) => {
-    try {
+const createAdmin = tryCatch(async (req, res) => {
         const { email, password, name } = req.body;
         const isRegistered = await AdminModel.findOne({ email });
 
@@ -57,16 +46,16 @@ const createAdmin = async (req, res) => {
             throw new Error("this email is already registered");
         }
 
-    }
-    catch (err) {
-        const error = errorHandler(err);
-        console.log(error);
-        return res.status(400).json({
-            success: false,
-            error
-        });
-    }
-};
+    
+    // catch (err) {
+    //     const error = errorHandler(err);
+    //     console.log(error);
+    //     return res.status(400).json({
+    //         success: false,
+    //         error
+    //     });
+    // }
+})
 
 
 const loginAdmin = tryCatch(async (req, res) => {
@@ -100,72 +89,41 @@ const loginAdmin = tryCatch(async (req, res) => {
 
 )
 
-const getAdminSignupForm = async (req, res) => {
-    try {
+const getAdminSignupForm = tryCatch(async (req, res) => {
         res.status(200).render("signupAdmin");
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
+});
 
-const getAdminLoginForm = async (req, res) => {
-    try {
+const getAdminLoginForm = tryCatch(async (req, res) => {
         res.status(200).render("loginAmin");
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
+});
 
 const adminDashboard = tryCatch(async (req, res) => {
         res.status(200).render("adminDashboard");
-    
 });
 
-const getAllUsers = async (req, res) => {
-    try{
+const getAllUsers = tryCatch(async (req, res) => {
         const users = await UserModel.find();
        res.status(200).render("allUsers", {users})
-    }
-    catch(err){
-        console.log(err.message);
-    }
-};
+});
 
-const logoutAdmin = async (req, res) => {
-    try{
+const logoutAdmin = tryCatch(async (req, res) => {
       res.cookie("adminToken", "");
       res.redirect("/api/v1/login-admin");
-    }
-    catch(err){
-        console.log(err.message)
-    }
-};
+});
 
-const viewAllCourses = async (req, res) => {
-    try{
+const viewAllCourses = tryCatch(async (req, res) => {
         const questions = await QuestionAndAnswerModel.find();
-       res.status(200).render("listCoursesAdmin", {questions});
-    }
-    catch(err){
-        console.log(err.message);
-    }
-};
+       res.status(200).render("listCoursesAdmin", {questions});   
+});
 
-const deleteACourse = async (req, res) => {
-    try{
+const deleteACourse = tryCatch(async (req, res) => {
      const {id} = req.params;
      const deletedCourse = await QuestionAndAnswerModel.findByIdAndDelete(id);
      res.status(200).json({
         success: true,
         message: {redirect: "/api/v1/courses"}
      });
-    }
-    catch(err){
-        console.log(err.message)
-    }
-}
+});
 
 module.exports = {
     uploadQuestionsAndAnswers,
